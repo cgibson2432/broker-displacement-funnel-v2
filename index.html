@@ -3,37 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Albano Insurance Solutions | Broker Displacement Funnel</title>
+<title>Albano Insurance Solutions | Contractor Benchmark Intelligence</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#071a2f;color:#fff;}
-.header{background:#0b2a45;padding:18px 24px;border-bottom:1px solid #1f3b5c;}
-.brand{font-size:18px;font-weight:bold;}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f7fb;
+  color:#0b1f33;
+}
+.header{
+  background:linear-gradient(90deg,#0b2a45,#123b5d);
+  padding:18px 24px;
+  color:#fff;
+}
+.brand{font-size:18px;font-weight:700;}
 .gold{color:#c89b3c;}
-.container{max-width:1000px;margin:auto;padding:24px;}
-.card{background:#0f2f4d;padding:18px;border-radius:10px;margin-bottom:16px;border:1px solid #1f3b5c;}
-input,select{width:100%;padding:10px;border-radius:6px;border:none;margin:6px 0;}
-.btn{background:#c89b3c;color:#000;font-weight:bold;border:none;padding:12px;width:100%;border-radius:6px;cursor:pointer;}
-.hidden{display:none;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-canvas{background:#fff;border-radius:8px;padding:10px;width:100%;height:300px !important;}
-.cta{background:#c89b3c;color:#000;padding:14px;border-radius:8px;text-align:center;font-weight:bold;cursor:pointer;margin-top:10px;}
-.subtle{opacity:0.85;font-size:13px;}
+.container{max-width:1100px;margin:auto;padding:24px;}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:18px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.06);
+}
+input,select{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #d9e2ef;
+  margin:6px 0;
+}
+.btn{
+  background:#c89b3c;
+  color:#000;
+  font-weight:700;
+  border:none;
+  padding:14px;
+  width:100%;
+  border-radius:8px;
+  cursor:pointer;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+canvas{
+  background:#fff;
+  border-radius:10px;
+  padding:10px;
+  height:320px !important;
+}
+.cta{
+  background:#0b2a45;
+  color:#fff;
+  padding:14px;
+  border-radius:10px;
+  text-align:center;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:10px;
+}
+.subtle{opacity:0.75;font-size:13px;}
+.table{
+  width:100%;
+  border-collapse:collapse;
+}
+.table th,.table td{
+  border-bottom:1px solid #e6eef7;
+  padding:10px;
+  text-align:left;
+  font-size:14px;
+}
+.badge{
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:12px;
+  background:#eef4ff;
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="brand"><span class="gold">Albano Insurance Solutions</span> | Broker Displacement Intelligence</div>
+  <div class="brand"><span class="gold">Albano Insurance Solutions</span> | Contractor Benchmark Intelligence Engine v3</div>
 </div>
 
 <div class="container">
 
-<!-- STEP 1: LEAD CAPTURE -->
+<!-- LEAD -->
 <div id="lead" class="card">
-  <h2>California Contractor Insurance Benchmark Check</h2>
-  <p class="subtle">Compare your insurance vs similar electricians & contractors in California</p>
+  <h2>California Contractor Insurance Benchmark Scan</h2>
+  <p class="subtle">Compare pricing, risk posture & carrier fit vs California contractor peers</p>
 
   <input id="business" placeholder="Business Name">
   <input id="contact" placeholder="Contact Name">
@@ -43,46 +106,45 @@ canvas{background:#fff;border-radius:8px;padding:10px;width:100%;height:300px !i
     <option>Electrician</option>
     <option>Plumber</option>
     <option>HVAC</option>
+    <option>General Contractor</option>
   </select>
 
   <input id="revenue" placeholder="Annual Revenue ($)">
   <input id="currentPremium" placeholder="Current Annual Premium ($)">
 
-  <label><input type="checkbox" id="consent"> I want my benchmark comparison</label>
+  <label><input type="checkbox" id="consent"> I authorize benchmark comparison</label>
 
-  <button class="btn" onclick="submitLead()">Run Benchmark Check</button>
+  <button class="btn" onclick="submitLead()">Run Benchmark</button>
 </div>
 
-<!-- STEP 2: GAP REVEAL (DISPLACEMENT HOOK) -->
-<div id="gap" class="card hidden">
-  <h2>Preliminary Findings</h2>
+<!-- GAP -->
+<div id="gap" class="card" style="display:none">
+  <h2>Preliminary Benchmark Signal</h2>
   <p id="gapText" class="subtle"></p>
-
   <ul>
-    <li>Potential pricing misalignment detected</li>
-    <li>Carrier fit review recommended</li>
-    <li>Risk classification variance found</li>
+    <li>Carrier pricing variance detected</li>
+    <li>Risk classification mismatch possible</li>
+    <li>Submission review recommended</li>
   </ul>
-
-  <div class="cta" onclick="showRisk()">Reveal Full Benchmark Report</div>
+  <div class="cta" onclick="showRisk()">Continue Risk Analysis</div>
 </div>
 
-<!-- STEP 3: RISK INPUTS -->
-<div id="dash" class="card hidden">
-  <h2>Risk Profile Inputs</h2>
+<!-- RISK -->
+<div id="dash" class="card" style="display:none">
+  <h2>Risk Profile Engine</h2>
 
-  <input id="height" placeholder="Height Exposure (0-10)">
-  <input id="hotwork" placeholder="Hot Work (0-10)">
-  <input id="claims" placeholder="Claims Count (3-5 yrs)">
-  <input id="claimvalue" placeholder="Total Claims Value ($)">
+  <input id="height" placeholder="Working at Heights (0-10)">
+  <input id="hotwork" placeholder="Hot Work Exposure (0-10)">
+  <input id="claimsCount" placeholder="Claims Count (3-5 yrs)">
+  <input id="claimsValue" placeholder="Total Claims Value ($)">
   <input id="subexpo" placeholder="Subcontractor Exposure (0-10)">
 
-  <button class="btn" onclick="runRisk()">Generate Benchmark Report</button>
+  <button class="btn" onclick="runRisk()">Generate Carrier Benchmark Report</button>
 </div>
 
-<!-- STEP 4: REPORT -->
-<div id="report" class="card hidden">
-  <h2>Broker Benchmark Displacement Report</h2>
+<!-- REPORT -->
+<div id="report" class="card" style="display:none">
+  <h2>Broker Displacement Report</h2>
 
   <div class="grid">
     <canvas id="premiumChart"></canvas>
@@ -90,11 +152,22 @@ canvas{background:#fff;border-radius:8px;padding:10px;width:100%;height:300px !i
   </div>
 
   <div class="card">
-    <h3>Carrier & Pricing Intelligence</h3>
+    <h3>Benchmark Summary</h3>
     <p id="benchmarkText"></p>
   </div>
 
-  <div class="cta" onclick="ctaAction()">Request a Policy Review (Free)</div>
+  <div class="card">
+    <h3>Carrier Intelligence Matrix</h3>
+    <table class="table">
+      <tr><th>Carrier</th><th>Appetite</th><th>Notes</th></tr>
+      <tr><td>UFG Insurance</td><td><span class="badge">Strong</span></td><td>Middle market contractors, flexible GL</td></tr>
+      <tr><td>AmTrust</td><td><span class="badge">Moderate</span></td><td>Higher risk trades, WC focus</td></tr>
+      <tr><td>Nationwide</td><td><span class="badge">Selective</span></td><td>Preferred contractors only</td></tr>
+      <tr><td>Liberty Mutual</td><td><span class="badge">Strong</span></td><td>Large accounts, bundled programs</td></tr>
+    </table>
+  </div>
+
+  <div class="cta" onclick="downloadPDF()">Download Full Benchmark PDF</div>
 </div>
 
 </div>
@@ -107,58 +180,60 @@ function $(id){return document.getElementById(id);}
 
 function postWebhook(data){fetch(MAKE_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(()=>{});} 
 
-function view(id){['lead','gap','dash','report'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden');}
+function show(id){['lead','gap','dash','report'].forEach(x=>$(x).style.display='none');$(id).style.display='block';}
 
-// STEP 1
 function submitLead(){
-  if(!$("consent").checked){alert("Consent required");return;}
+  if(!$('consent').checked){alert('Consent required');return;}
 
   lead={
-    business:$("business").value,
-    contact:$("contact").value,
-    email:$("email").value,
-    trade:$("trade").value,
-    revenue:parseFloat($("revenue").value)||0,
-    currentPremium:parseFloat($("currentPremium").value)||0
+    business:$('business').value,
+    contact:$('contact').value,
+    email:$('email').value,
+    trade:$('trade').value,
+    revenue:parseFloat($('revenue').value)||0,
+    currentPremium:parseFloat($('currentPremium').value)||0
   };
 
-  postWebhook({event:"lead_created",lead});
+  postWebhook({event:'lead_created',lead});
 
-  let avg=(lead.revenue/1000)*8;
-  let msg="Your profile is being compared against California contractor benchmarks...";
-  $("gapText").innerText=msg;
-
-  view('gap');
+  $('gapText').innerText="We are comparing your policy against California contractor benchmark datasets...";
+  show('gap');
 }
 
-// STEP 2
 function showRisk(){
-  postWebhook({event:"gap_reveal_viewed",lead});
-  view('dash');
+  postWebhook({event:'gap_viewed',lead});
+  show('dash');
 }
 
-const CA_RATES={ Electrician:9.5, Plumber:8.2, HVAC:7.8 };
+const BASE_RATES={Electrician:9.2,Plumber:8.5,HVAC:8.0,"General Contractor":10.1};
 
-// STEP 3
 function runRisk(){
 
-  let score=(+$('height').value*2)+(+$("hotwork").value*3)+(+$("claims").value*8)+((+$("claimvalue").value/10000)*5)+(+$("subexpo").value*1.5);
+  let claimsCount=parseFloat($('claimsCount').value)||0;
+  let claimsValue=parseFloat($('claimsValue').value)||0;
 
-  let lossProfile=score>60?'Severe':score>30?'Moderate':'Clean';
+  let score=
+    (+$('height').value*2.2)+
+    (+$('hotwork').value*3.1)+
+    (claimsCount*9)+
+    ((claimsValue/10000)*4.5)+
+    (+$('subexpo').value*1.6);
 
-  let benchmark=(lead.revenue/1000)*(CA_RATES[lead.trade]||8);
-  let modeled=benchmark+(score*110);
+  let lossProfile=score>65?'Severe':score>35?'Moderate':'Clean';
 
-  reportData={score,lossProfile,benchmark,modeled,current:lead.currentPremium};
+  let rate=BASE_RATES[lead.trade]||9;
+  let benchmark=(lead.revenue/1000)*rate;
+  let riskAdj=benchmark+(score*120);
+
+  reportData={score,lossProfile,benchmark,riskAdj,current:lead.currentPremium};
 
   renderCharts();
-  view('report');
+  show('report');
 
-  postWebhook({event:"report_viewed",lead,reportData});
+  postWebhook({event:'report_generated',lead,reportData});
 }
 
-let premiumChart=null;
-let riskChart=null;
+let premiumChart,riskChart;
 
 function renderCharts(){
 
@@ -168,27 +243,35 @@ function renderCharts(){
   premiumChart=new Chart($("premiumChart"),{
     type:'bar',
     data:{
-      labels:['Your Current','Market Benchmark','Risk Adjusted'],
-      datasets:[{data:[reportData.current,reportData.benchmark,reportData.modeled]}]
+      labels:['Current','Benchmark','Risk Adjusted'],
+      datasets:[{data:[reportData.current,reportData.benchmark,reportData.riskAdj]}]
     }
   });
 
   riskChart=new Chart($("riskChart"),{
     type:'doughnut',
     data:{
-      labels:['Risk Score','Remaining'],
+      labels:['Risk','Safe'],
       datasets:[{data:[reportData.score,Math.max(0,100-reportData.score)]}]
     }
   });
 
-  $("benchmarkText").innerText=
-    `Loss Profile: ${reportData.lossProfile} | Benchmark: $${Math.round(reportData.benchmark)} | Risk Adjusted: $${Math.round(reportData.modeled)}`;
+  $('benchmarkText').innerText=
+    `Loss Profile: ${reportData.lossProfile} | Score: ${Math.round(reportData.score)} | Benchmark: $${Math.round(reportData.benchmark)} | Risk Adjusted: $${Math.round(reportData.riskAdj)}`;
 }
 
-// STEP 4 CTA
-function ctaAction(){
-  postWebhook({event:"cta_clicked",lead,reportData});
-  alert("A licensed broker will contact you shortly for a coverage review.");
+function downloadPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc=new jsPDF();
+
+  doc.text("Contractor Insurance Benchmark Report",10,10);
+  doc.text(`Loss Profile: ${reportData.lossProfile}`,10,20);
+  doc.text(`Benchmark Premium: $${Math.round(reportData.benchmark)}`,10,30);
+  doc.text(`Risk Adjusted: $${Math.round(reportData.riskAdj)}`,10,40);
+
+  doc.save("benchmark-report.pdf");
+
+  postWebhook({event:'pdf_downloaded',lead,reportData});
 }
 
 </script>
