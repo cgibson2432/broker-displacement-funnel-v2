@@ -89,15 +89,15 @@ canvas{
 <body>
 
 <div class="header">
-  <div class="brand"><span class="gold">Albano Insurance Solutions</span> | Contractor Job Cost & Insurance Benchmark Engine</div>
+  <div class="brand"><span class="gold">Albano Insurance Solutions</span> | Contractor Job Cost Intelligence Report</div>
 </div>
 
 <div class="container">
 
 <!-- LEAD -->
 <div id="lead" class="card">
-  <h2>Contractor Insurance & Job Pricing Benchmark Scan</h2>
-  <p class="subtle">Understand how your insurance costs impact job bidding, margins, and competitiveness in your market</p>
+  <h2>Before you scroll… your insurance may already be costing you jobs.</h2>
+  <p class="subtle">This is not a quote. This is a reality check on how your insurance structure impacts your ability to win bids in California.</p>
 
   <input id="business" placeholder="Business Name">
   <input id="contact" placeholder="Contact Name">
@@ -115,24 +115,24 @@ canvas{
 
   <label><input type="checkbox" id="consent"> I authorize benchmark comparison</label>
 
-  <button class="btn" onclick="submitLead()">Analyze My Cost Position</button>
+  <button class="btn" onclick="submitLead()">Show Me If I'm Overpaying</button>
 </div>
 
 <!-- GAP -->
 <div id="gap" class="card" style="display:none">
-  <h2>Preliminary Cost Position Insight</h2>
+  <h2>What most contractors don’t realize…</h2>
   <p id="gapText" class="subtle"></p>
   <ul>
-    <li>Your insurance cost is being compared against similar contractors in your trade</li>
-    <li>Pricing differences may impact your ability to win bids</li>
-    <li>Policy structure and endorsements are being evaluated</li>
+    <li>Your insurance is being compared to contractors just like you in California</li>
+    <li>Small differences in structure can quietly kill bid competitiveness</li>
+    <li>Many contractors are unknowingly overpaying due to broker placement gaps</li>
   </ul>
-  <div class="cta" onclick="showRisk()">See Your Job Cost Impact</div>
+  <div class="cta" onclick="showRisk()">Continue to My Cost Reality</div>
 </div>
 
 <!-- RISK -->
 <div id="dash" class="card" style="display:none">
-  <h2>Job Risk & Cost Driver Analysis</h2>
+  <h2>What your job site exposure is doing to your insurance cost</h2>
 
   <input id="height" placeholder="Work Height Exposure (0-10)">
   <input id="hotwork" placeholder="Hot Work Exposure (0-10)">
@@ -140,12 +140,13 @@ canvas{
   <input id="claimsValue" placeholder="Total Claims Cost ($)">
   <input id="subexpo" placeholder="Subcontractor Exposure (0-10)">
 
-  <button class="btn" onclick="runRisk()">Generate Cost Impact Report</button>
+  <button class="btn" onclick="runRisk()">Reveal My Bid Impact</button>
 </div>
 
 <!-- REPORT -->
 <div id="report" class="card" style="display:none">
-  <h2>How Your Insurance Impacts Your Ability to Win Jobs</h2>
+
+  <h2>Your Insurance is not just a cost… it is a pricing weapon (or liability)</h2>
 
   <div class="grid">
     <canvas id="premiumChart"></canvas>
@@ -153,41 +154,50 @@ canvas{
   </div>
 
   <div class="card">
-    <h3>What This Means for Your Business</h3>
+    <h3>What this actually means (in contractor terms)</h3>
     <p id="benchmarkText"></p>
+
     <p class="subtle">
-      This report shows how your insurance cost structure compares to other contractors in your market and how it may affect:
-      <br><br>
-      • Your ability to stay competitive on bids<br>
-      • Your project profit margins<br>
-      • Whether you are overpaying compared to similar contractors<br>
-      • Whether missing endorsements or coverage structure is increasing your cost<br>
+      If your insurance cost is above market expectations, you are likely forced to:
+      increase bid pricing, reduce margin, or lose jobs to competitors with cleaner risk positioning.
     </p>
   </div>
 
   <div class="card">
-    <h3>What We Look For (Cost Drivers)</h3>
+    <h3>What we are really looking at</h3>
     <table class="table">
-      <tr><th>Factor</th><th>Business Impact</th></tr>
-      <tr><td>Claims History</td><td>Directly increases insurance cost and bid pricing pressure</td></tr>
-      <tr><td>Work Exposure (Heights / Hot Work)</td><td>Raises carrier pricing and reduces market options</td></tr>
-      <tr><td>Subcontractor Use</td><td>Often causes hidden coverage gaps and endorsement issues</td></tr>
-      <tr><td>Policy Structure</td><td>Missing endorsements can lead to overpaying vs competitors</td></tr>
+      <tr><th>Signal</th><th>What it means for your business</th></tr>
+      <tr><td>Cost Position</td><td>Are you competitively priced to win bids in your trade?</td></tr>
+      <tr><td>Risk Load</td><td>Are jobsite exposures forcing higher premiums?</td></tr>
+      <tr><td>Carrier Appetite Fit</td><td>Are you placed with the right insurance markets?</td></tr>
+      <tr><td>Broker Efficiency Gap</td><td>Are endorsements or structure costing you money?</td></tr>
     </table>
   </div>
 
   <div class="card">
-    <h3>Carrier Positioning Overview</h3>
+    <h3>Broker Blind Spot Alert</h3>
+    <p>
+      Many contractors are not “high risk”… they are just <b>mis-positioned</b>.
+      That mis-positioning quietly increases premiums and forces higher bid pricing.
+    </p>
+    <p>
+      Translation: You may not be losing jobs because of skill — but because of insurance cost structure.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Carrier Fit Intelligence</h3>
     <table class="table">
-      <tr><th>Carrier</th><th>Best Fit</th><th>When Used</th></tr>
-      <tr><td>UFG Insurance</td><td>Strong</td><td>Balanced contractors with stable loss history</td></tr>
-      <tr><td>AmTrust</td><td>Moderate</td><td>Higher risk trades or WC-heavy risks</td></tr>
-      <tr><td>Nationwide</td><td>Select</td><td>Preferred low-risk contractors</td></tr>
-      <tr><td>Liberty Mutual</td><td>Strong</td><td>Larger contractors with bundled coverage needs</td></tr>
+      <tr><th>Carrier</th><th>Positioning Insight</th></tr>
+      <tr><td>UFG Insurance</td><td>Stable contractors with clean loss history</td></tr>
+      <tr><td>AmTrust</td><td>WC-heavy or higher volatility risk profiles</td></tr>
+      <tr><td>Nationwide</td><td>Preferred lower risk contractor profiles</td></tr>
+      <tr><td>Liberty Mutual</td><td>Scaled contractors with bundled coverage needs</td></tr>
     </table>
   </div>
 
-  <div class="cta" onclick="downloadPDF()">Download My Cost Impact Report</div>
+  <div class="cta" onclick="downloadPDF()">Download My Contractor Cost Impact Report</div>
+
 </div>
 
 </div>
@@ -216,7 +226,7 @@ function submitLead(){
 
   postWebhook({event:'lead_created',lead});
 
-  $('gapText').innerText="We are analyzing how your insurance cost compares to contractors in your trade and what it means for your bidding competitiveness...";
+  $('gapText').innerText="We are comparing your business against real California contractor insurance placement patterns to see if you are overpaying or mis-positioned in the market...";
   show('gap');
 }
 
@@ -225,7 +235,12 @@ function showRisk(){
   show('dash');
 }
 
-const BASE_RATES={Electrician:9.2,Plumber:8.5,HVAC:8.0,"General Contractor":10.1};
+const BASE_RATE_PERCENT={
+  Electrician:0.006,
+  Plumber:0.0065,
+  HVAC:0.0062,
+  "General Contractor":0.0075
+};
 
 function runRisk(){
 
@@ -241,16 +256,41 @@ function runRisk(){
 
   let lossProfile=score>65?'High Cost Pressure':score>35?'Moderate Cost Pressure':'Low Cost Pressure';
 
-  let rate=BASE_RATES[lead.trade]||9;
-  let industryExpected=(lead.revenue/1000)*rate;
-  let adjustedIndustryEstimate=industryExpected+(score*120);
+  let rate=BASE_RATE_PERCENT[lead.trade]||0.0065;
+  let industryExpected=lead.revenue*rate;
+  let adjustedIndustryEstimate=industryExpected*(1+(score/80)*1.5);
 
   reportData={score,lossProfile,industryExpected,adjustedIndustryEstimate,current:lead.currentPremium};
+
+  let bidLeak=Math.max(0,reportData.current-reportData.industryExpected);
 
   renderCharts();
   show('report');
 
-  postWebhook({event:'report_generated',lead,reportData});
+  $('benchmarkText').innerText=
+`Let’s be direct — like a crumpled note you weren’t supposed to see.
+
+Your insurance position tells a story your bids may already be paying for.
+
+Trade: ${lead.trade}
+Revenue: $${lead.revenue.toLocaleString()}
+Current Insurance Cost: $${lead.currentPremium.toLocaleString()}
+
+Industry Expected Range (CA Contractors): $${Math.round(industryExpected).toLocaleString()}
+Risk Adjusted Market Position: $${Math.round(adjustedIndustryEstimate).toLocaleString()}
+
+What this means:
+- If you are above market → you are likely inflating bids to protect margin
+- If you are below market → you may be underinsured and exposed on jobs
+
+Estimated Bid Pressure (Cost Leakage): $${Math.round(bidLeak).toLocaleString()}
+
+Translation:
+This is the gap between what you are paying… and what your competitors are likely operating at.
+That gap often shows up as lost bids, tighter margins, or jobs you “almost won.”
+
+This is not about insurance.
+This is about whether your insurance is helping you win work… or pricing you out of it.`;
 }
 
 let premiumChart,riskChart;
@@ -263,7 +303,7 @@ function renderCharts(){
   premiumChart=new Chart($("premiumChart"),{
     type:'bar',
     data:{
-      labels:['Your Current Cost','Market Expectation','If Risk is Fully Priced In'],
+      labels:['Your Current Premium','Industry Expected','Risk Adjusted Position'],
       datasets:[{data:[reportData.current,reportData.industryExpected,reportData.adjustedIndustryEstimate]}]
     }
   });
@@ -275,21 +315,18 @@ function renderCharts(){
       datasets:[{data:[reportData.score,Math.max(0,100-reportData.score)]}]
     }
   });
-
-  $('benchmarkText').innerText=
-    `Your insurance cost position is ${reportData.lossProfile}. Your current cost structure vs market expectation shows a potential gap affecting how competitively you can bid work and control margins. Estimated variance: $${Math.round(reportData.adjustedIndustryEstimate - reportData.industryExpected)}`;
 }
 
 function downloadPDF(){
   const { jsPDF } = window.jspdf;
   const doc=new jsPDF();
 
-  doc.text("Contractor Cost Impact & Insurance Benchmark Report",10,10);
-  doc.text(`Cost Pressure Level: ${reportData.lossProfile}`,10,20);
-  doc.text(`Market Expectation: $${Math.round(reportData.industryExpected)}`,10,30);
-  doc.text(`Cost Under Risk Pressure: $${Math.round(reportData.adjustedIndustryEstimate)}`,10,40);
+  doc.text("Contractor Cost Impact Report",10,10);
+  doc.text(`Cost Pressure: ${reportData.lossProfile}`,10,20);
+  doc.text(`Industry Expected: $${Math.round(reportData.industryExpected)}`,10,30);
+  doc.text(`Risk Adjusted: $${Math.round(reportData.adjustedIndustryEstimate)}`,10,40);
 
-  doc.save("cost-impact-report.pdf");
+  doc.save("contractor-report.pdf");
 
   postWebhook({event:'pdf_downloaded',lead,reportData});
 }
