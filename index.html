@@ -10,34 +10,35 @@
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#f4f7fb;
-  color:#0b1f33;
+  background:#ffffff;
+  color:#000000;
 }
 .header{
   background:linear-gradient(90deg,#0b2a45,#123b5d);
   padding:18px 24px;
-  color:#fff;
+  color:#ffffff;
 }
 .brand{font-size:18px;font-weight:700;}
-.gold{color:#c89b3c;}
+.gold{color:#4aa3ff;}
 .container{max-width:1100px;margin:auto;padding:24px;}
 .card{
-  background:#fff;
+  background:#ffffff;
   padding:20px;
   border-radius:12px;
   margin-bottom:18px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.06);
+  box-shadow:0 8px 22px rgba(0,0,0,0.08);
+  border:1px solid #e6eef7;
 }
 input,select{
   width:100%;
   padding:12px;
   border-radius:8px;
-  border:1px solid #d9e2ef;
+  border:1px solid #cfe3ff;
   margin:6px 0;
 }
 .btn{
-  background:#c89b3c;
-  color:#000;
+  background:#0b2a45;
+  color:#ffffff;
   font-weight:700;
   border:none;
   padding:14px;
@@ -51,14 +52,14 @@ input,select{
   gap:16px;
 }
 canvas{
-  background:#fff;
+  background:#ffffff;
   border-radius:10px;
   padding:10px;
   height:320px !important;
 }
 .cta{
-  background:#0b2a45;
-  color:#fff;
+  background:#4aa3ff;
+  color:#000000;
   padding:14px;
   border-radius:10px;
   text-align:center;
@@ -144,7 +145,7 @@ canvas{
 
 <!-- REPORT -->
 <div id="report" class="card" style="display:none">
-  <h2>Broker Displacement Report</h2>
+  <h2>Industry Expected</h2>
 
   <div class="grid">
     <canvas id="premiumChart"></canvas>
@@ -152,8 +153,9 @@ canvas{
   </div>
 
   <div class="card">
-    <h3>Benchmark Summary</h3>
+    <h3>Industry Expected vs Your Policy</h3>
     <p id="benchmarkText"></p>
+    <p class="subtle">This view compares your current insurance program against expected industry standards and underwriting benchmarks.</p>
   </div>
 
   <div class="card">
@@ -222,10 +224,10 @@ function runRisk(){
   let lossProfile=score>65?'Severe':score>35?'Moderate':'Clean';
 
   let rate=BASE_RATES[lead.trade]||9;
-  let benchmark=(lead.revenue/1000)*rate;
-  let riskAdj=benchmark+(score*120);
+  let industryExpected=(lead.revenue/1000)*rate;
+  let adjustedIndustryEstimate=industryExpected+(score*120);
 
-  reportData={score,lossProfile,benchmark,riskAdj,current:lead.currentPremium};
+  reportData={score,lossProfile,industryExpected,adjustedIndustryEstimate,current:lead.currentPremium};
 
   renderCharts();
   show('report');
@@ -243,21 +245,21 @@ function renderCharts(){
   premiumChart=new Chart($("premiumChart"),{
     type:'bar',
     data:{
-      labels:['Current','Benchmark','Risk Adjusted'],
-      datasets:[{data:[reportData.current,reportData.benchmark,reportData.riskAdj]}]
+      labels:['Current','Industry Expected','Adjusted Industry Estimate'],
+      datasets:[{data:[reportData.current,reportData.industryExpected,reportData.adjustedIndustryEstimate]}]
     }
   });
 
   riskChart=new Chart($("riskChart"),{
     type:'doughnut',
     data:{
-      labels:['Risk','Safe'],
+      labels:['Exposure Level','Stability'],
       datasets:[{data:[reportData.score,Math.max(0,100-reportData.score)]}]
     }
   });
 
   $('benchmarkText').innerText=
-    `Loss Profile: ${reportData.lossProfile} | Score: ${Math.round(reportData.score)} | Benchmark: $${Math.round(reportData.benchmark)} | Risk Adjusted: $${Math.round(reportData.riskAdj)}`;
+    `Loss Profile: ${reportData.lossProfile} | Score: ${Math.round(reportData.score)} | Industry Expected: $${Math.round(reportData.industryExpected)} | Adjusted Industry Estimate: $${Math.round(reportData.adjustedIndustryEstimate)}`;
 }
 
 function downloadPDF(){
@@ -266,8 +268,8 @@ function downloadPDF(){
 
   doc.text("Contractor Insurance Benchmark Report",10,10);
   doc.text(`Loss Profile: ${reportData.lossProfile}`,10,20);
-  doc.text(`Benchmark Premium: $${Math.round(reportData.benchmark)}`,10,30);
-  doc.text(`Risk Adjusted: $${Math.round(reportData.riskAdj)}`,10,40);
+  doc.text(`Industry Expected: $${Math.round(reportData.industryExpected)}`,10,30);
+  doc.text(`Adjusted Industry Estimate: $${Math.round(reportData.adjustedIndustryEstimate)}`,10,40);
 
   doc.save("benchmark-report.pdf");
 
