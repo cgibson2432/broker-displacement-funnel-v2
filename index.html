@@ -3,150 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Albano Insurance Solutions | Contractor Benchmark Intelligence</title>
+<title>Albano Insurance Solutions | Broker Displacement Engine v6</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#ffffff;
-  color:#000000;
+:root{
+  --navy:#0b2a45;
+  --blue:#2f80ed;
+  --light:#f5f9ff;
+  --text:#0a0a0a;
+  --card:#ffffff;
+  --danger:#d64545;
+  --good:#1f9d55;
 }
+
+body{margin:0;font-family:'Inter',Arial,sans-serif;background:#fff;color:var(--text);}
+
 .header{
-  background:linear-gradient(90deg,#0b2a45,#123b5d);
+  background:linear-gradient(90deg,var(--navy),#123b5d);
   padding:18px 24px;
-  color:#ffffff;
+  color:#fff;
 }
+
 .brand{font-size:18px;font-weight:700;}
-.gold{color:#4aa3ff;}
+
 .container{max-width:1100px;margin:auto;padding:24px;}
+
 .card{
-  background:#ffffff;
+  background:var(--card);
   padding:20px;
-  border-radius:12px;
+  border-radius:14px;
   margin-bottom:18px;
-  box-shadow:0 8px 22px rgba(0,0,0,0.08);
-  border:1px solid #e6eef7;
+  box-shadow:0 10px 24px rgba(0,0,0,0.08);
+  border:1px solid #e7eef8;
 }
+
 input,select{
   width:100%;
   padding:12px;
-  border-radius:8px;
-  border:1px solid #cfe3ff;
+  border-radius:10px;
+  border:1px solid #d6e6ff;
   margin:6px 0;
+  font-family:'Inter';
 }
+
 .btn{
-  background:#0b2a45;
-  color:#ffffff;
+  background:var(--navy);
+  color:#fff;
   font-weight:700;
   border:none;
   padding:14px;
   width:100%;
-  border-radius:8px;
+  border-radius:10px;
   cursor:pointer;
 }
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-canvas{
-  background:#ffffff;
-  border-radius:10px;
-  padding:10px;
-  height:320px !important;
-}
-.cta{
-  background:#4aa3ff;
-  color:#000000;
-  padding:14px;
-  border-radius:10px;
-  text-align:center;
-  font-weight:700;
-  cursor:pointer;
-  margin-top:10px;
-}
-.subtle{opacity:0.75;font-size:13px;}
-.table{
-  width:100%;
-  border-collapse:collapse;
-}
-.table th,.table td{
-  border-bottom:1px solid #e6eef7;
-  padding:10px;
-  text-align:left;
-  font-size:14px;
-}
-.badge{
-  padding:4px 8px;
-  border-radius:6px;
-  font-size:12px;
-  background:#eef4ff;
-}
+
+.btn.secondary{background:var(--blue);}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+canvas{background:#fff;border-radius:10px;padding:10px;height:320px !important;}
+
+.question{padding:12px;border:1px solid #e6eef7;border-radius:10px;margin:8px 0;}
+.label{font-weight:600;font-size:13px;}
+.subtle{opacity:.7;font-size:13px;}
+
+.highlight-danger{color:var(--danger);font-weight:700;}
+.highlight-good{color:var(--good);font-weight:700;}
+
+.big-headline{font-size:22px;font-weight:800;line-height:1.3;}
+.subhead{font-size:14px;opacity:.8;}
+
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="brand"><span class="gold">Albano Insurance Solutions</span> | Contractor Job Cost Intelligence Report</div>
+  <div class="brand">Albano Insurance Solutions | Broker Displacement Engine v6</div>
 </div>
 
 <div class="container">
 
-<!-- LEAD -->
-<div id="lead" class="card">
-  <h2>Before you scroll… your insurance may already be costing you jobs.</h2>
-  <p class="subtle">This is not a quote. This is a reality check on how your insurance structure impacts your ability to win bids in California.</p>
+<!-- LEAD FORM -->
+<div class="card" id="leadCard">
+  <div class="big-headline">Your insurance broker may already be costing you jobs.</div>
+  <div class="subhead">We reverse-engineer California underwriting standards to expose hidden bid leakage.</div>
 
   <input id="business" placeholder="Business Name">
   <input id="contact" placeholder="Contact Name">
   <input id="email" placeholder="Email">
 
-  <select id="trade">
-    <option>Electrician</option>
-    <option>Plumber</option>
-    <option>HVAC</option>
-    <option>General Contractor</option>
+  <select id="trade" onchange="loadQuestions()">
+    <option value="Electrician">Electrician</option>
+    <option value="Plumber">Plumber</option>
+    <option value="Painter">Painter</option>
+    <option value="HVAC">HVAC</option>
+    <option value="General Contractor">General Contractor</option>
   </select>
 
   <input id="revenue" placeholder="Annual Revenue ($)">
-  <input id="currentPremium" placeholder="Current Annual Insurance Cost ($)">
+  <input id="currentPremium" placeholder="Current Insurance Cost ($)">
 
-  <label><input type="checkbox" id="consent"> I authorize benchmark comparison</label>
+  <div id="dynamicQuestions"></div>
 
-  <button class="btn" onclick="submitLead()">Show Me If I'm Overpaying</button>
-</div>
+  <label><input type="checkbox" id="consent"> I authorize benchmark analysis</label>
 
-<!-- GAP -->
-<div id="gap" class="card" style="display:none">
-  <h2>What most contractors don’t realize…</h2>
-  <p id="gapText" class="subtle"></p>
-  <ul>
-    <li>Your insurance is being compared to contractors just like you in California</li>
-    <li>Small differences in structure can quietly kill bid competitiveness</li>
-    <li>Many contractors are unknowingly overpaying due to broker placement gaps</li>
-  </ul>
-  <div class="cta" onclick="showRisk()">Continue to My Cost Reality</div>
-</div>
-
-<!-- RISK -->
-<div id="dash" class="card" style="display:none">
-  <h2>What your job site exposure is doing to your insurance cost</h2>
-
-  <input id="height" placeholder="Work Height Exposure (0-10)">
-  <input id="hotwork" placeholder="Hot Work Exposure (0-10)">
-  <input id="claimsCount" placeholder="Claims in Last 5 Years">
-  <input id="claimsValue" placeholder="Total Claims Cost ($)">
-  <input id="subexpo" placeholder="Subcontractor Exposure (0-10)">
-
-  <button class="btn" onclick="runRisk()">Reveal My Bid Impact</button>
+  <button class="btn" onclick="submitLead()">Expose My Broker Gap</button>
 </div>
 
 <!-- REPORT -->
-<div id="report" class="card" style="display:none">
+<div class="card" id="report" style="display:none">
 
-  <h2>Your Insurance is not just a cost… it is a pricing weapon (or liability)</h2>
+  <div class="big-headline">Broker Displacement Report</div>
+  <p id="executiveInsight"></p>
 
   <div class="grid">
     <canvas id="premiumChart"></canvas>
@@ -154,183 +128,125 @@ canvas{
   </div>
 
   <div class="card">
-    <h3>What this actually means (in contractor terms)</h3>
-    <p id="benchmarkText"></p>
-
-    <p class="subtle">
-      If your insurance cost is above market expectations, you are likely forced to:
-      increase bid pricing, reduce margin, or lose jobs to competitors with cleaner risk positioning.
-    </p>
+    <h3>Displacement Intelligence</h3>
+    <p id="analysisText"></p>
   </div>
 
   <div class="card">
-    <h3>What we are really looking at</h3>
-    <table class="table">
-      <tr><th>Signal</th><th>What it means for your business</th></tr>
-      <tr><td>Cost Position</td><td>Are you competitively priced to win bids in your trade?</td></tr>
-      <tr><td>Risk Load</td><td>Are jobsite exposures forcing higher premiums?</td></tr>
-      <tr><td>Carrier Appetite Fit</td><td>Are you placed with the right insurance markets?</td></tr>
-      <tr><td>Broker Efficiency Gap</td><td>Are endorsements or structure costing you money?</td></tr>
-    </table>
+    <h3>Broker Inefficiency Score</h3>
+    <p id="brokerScoreText"></p>
   </div>
 
-  <div class="card">
-    <h3>Broker Blind Spot Alert</h3>
-    <p>
-      Many contractors are not “high risk”… they are just <b>mis-positioned</b>.
-      That mis-positioning quietly increases premiums and forces higher bid pricing.
-    </p>
-    <p>
-      Translation: You may not be losing jobs because of skill — but because of insurance cost structure.
-    </p>
-  </div>
-
-  <div class="card">
-    <h3>Carrier Fit Intelligence</h3>
-    <table class="table">
-      <tr><th>Carrier</th><th>Positioning Insight</th></tr>
-      <tr><td>UFG Insurance</td><td>Stable contractors with clean loss history</td></tr>
-      <tr><td>AmTrust</td><td>WC-heavy or higher volatility risk profiles</td></tr>
-      <tr><td>Nationwide</td><td>Preferred lower risk contractor profiles</td></tr>
-      <tr><td>Liberty Mutual</td><td>Scaled contractors with bundled coverage needs</td></tr>
-    </table>
-  </div>
-
-  <div class="cta" onclick="downloadPDF()">Download My Contractor Cost Impact Report</div>
-
+  <button class="btn secondary" onclick="downloadPDF()">Download Executive PDF</button>
 </div>
 
 </div>
 
 <script>
 let lead={}, reportData={};
-const MAKE_WEBHOOK_URL="https://hook.us2.make.com/r3k8n4tsh0lfn6fypy6welptxdkhigtq";
 
-function $(id){return document.getElementById(id);} 
-
-function postWebhook(data){fetch(MAKE_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)}).catch(()=>{});} 
-
-function show(id){['lead','gap','dash','report'].forEach(x=>$(x).style.display='none');$(id).style.display='block';}
-
-function submitLead(){
-  if(!$('consent').checked){alert('Consent required');return;}
-
-  lead={
-    business:$('business').value,
-    contact:$('contact').value,
-    email:$('email').value,
-    trade:$('trade').value,
-    revenue:parseFloat($('revenue').value)||0,
-    currentPremium:parseFloat($('currentPremium').value)||0
-  };
-
-  postWebhook({event:'lead_created',lead});
-
-  $('gapText').innerText="We are comparing your business against real California contractor insurance placement patterns to see if you are overpaying or mis-positioned in the market...";
-  show('gap');
-}
-
-function showRisk(){
-  postWebhook({event:'gap_viewed',lead});
-  show('dash');
-}
-
-const BASE_RATE_PERCENT={
-  Electrician:0.006,
-  Plumber:0.0065,
-  HVAC:0.0062,
-  "General Contractor":0.0075
+const QUESTIONS={
+  Electrician:["Live wire work?","Height exposure 0–10?","Subcontractors used?"],
+  Plumber:["Underground work?","Water damage risk 0–10?","Prior water claims?"],
+  Painter:["Ladder/scaffold work?","Chemical exposure?","Overspray risk 0–10?"],
+  HVAC:["Roof installs?","Electrical/refrigerant exposure 0–10?","Subs used?"],
+  "General Contractor":["% subcontracted?","Project complexity 0–10?","Multi-trade projects?"]
 };
 
-function runRisk(){
-
-  let claimsCount=parseFloat($('claimsCount').value)||0;
-  let claimsValue=parseFloat($('claimsValue').value)||0;
-
-  let score=
-    (+$('height').value*2.2)+
-    (+$('hotwork').value*3.1)+
-    (claimsCount*9)+
-    ((claimsValue/10000)*4.5)+
-    (+$('subexpo').value*1.6);
-
-  let lossProfile=score>65?'High Cost Pressure':score>35?'Moderate Cost Pressure':'Low Cost Pressure';
-
-  let rate=BASE_RATE_PERCENT[lead.trade]||0.0065;
-  let industryExpected=lead.revenue*rate;
-  let adjustedIndustryEstimate=industryExpected*(1+(score/80)*1.5);
-
-  reportData={score,lossProfile,industryExpected,adjustedIndustryEstimate,current:lead.currentPremium};
-
-  let bidLeak=Math.max(0,reportData.current-reportData.industryExpected);
-
-  renderCharts();
-  show('report');
-
-  $('benchmarkText').innerText=
-`Let’s be direct — like a crumpled note you weren’t supposed to see.
-
-Your insurance position tells a story your bids may already be paying for.
-
-Trade: ${lead.trade}
-Revenue: $${lead.revenue.toLocaleString()}
-Current Insurance Cost: $${lead.currentPremium.toLocaleString()}
-
-Industry Expected Range (CA Contractors): $${Math.round(industryExpected).toLocaleString()}
-Risk Adjusted Market Position: $${Math.round(adjustedIndustryEstimate).toLocaleString()}
-
-What this means:
-- If you are above market → you are likely inflating bids to protect margin
-- If you are below market → you may be underinsured and exposed on jobs
-
-Estimated Bid Pressure (Cost Leakage): $${Math.round(bidLeak).toLocaleString()}
-
-Translation:
-This is the gap between what you are paying… and what your competitors are likely operating at.
-That gap often shows up as lost bids, tighter margins, or jobs you “almost won.”
-
-This is not about insurance.
-This is about whether your insurance is helping you win work… or pricing you out of it.`;
+function loadQuestions(){
+  const t=trade.value;
+  const box=document.getElementById('dynamicQuestions');
+  box.innerHTML="";
+  (QUESTIONS[t]||[]).forEach((q,i)=>{
+    box.innerHTML+=`<div class='question'><div class='label'>${q}</div><input id='q${i}'></div>`;
+  });
 }
 
-let premiumChart,riskChart;
+loadQuestions();
 
-function renderCharts(){
+function submitLead(){
+  if(!consent.checked){alert('Consent required');return;}
 
-  if(premiumChart) premiumChart.destroy();
-  if(riskChart) riskChart.destroy();
+  lead={
+    business:business.value,
+    contact:contact.value,
+    email:email.value,
+    trade:trade.value,
+    revenue:+revenue.value,
+    premium:+currentPremium.value
+  };
 
-  premiumChart=new Chart($("premiumChart"),{
-    type:'bar',
-    data:{
-      labels:['Your Current Premium','Industry Expected','Risk Adjusted Position'],
-      datasets:[{data:[reportData.current,reportData.industryExpected,reportData.adjustedIndustryEstimate]}]
-    }
-  });
+  let exposure=0;
+  document.querySelectorAll('#dynamicQuestions input').forEach(i=>exposure+=+i.value||0);
 
-  riskChart=new Chart($("riskChart"),{
-    type:'doughnut',
-    data:{
-      labels:['Cost Pressure','Stability'],
-      datasets:[{data:[reportData.score,Math.max(0,100-reportData.score)]}]
-    }
-  });
+  const rate={Electrician:.006,Plumber:.0065,HVAC:.0062,Painter:.0058,"General Contractor":.0075}[lead.trade]||.006;
+
+  const industry=lead.revenue*rate;
+  const adjusted=industry*(1+(exposure/30));
+
+  const gap=Math.max(0,lead.premium-industry);
+
+  const inefficiency=Math.min(100,Math.round((gap/(industry||1))*100));
+
+  const jobsLost=Math.round(gap/7500);
+
+  reportData={industry,adjusted,exposure,gap,inefficiency,jobsLost};
+
+  render();
+
+  report.style.display='block';
+  leadCard.style.display='none';
+}
+
+function render(){
+
+  new Chart(premiumChart,{type:'bar',data:{labels:['Current','Industry','Adjusted'],datasets:[{data:[lead.premium,reportData.industry,reportData.adjusted]}]}});
+
+  new Chart(riskChart,{type:'doughnut',data:{labels:['Exposure','Stable'],datasets:[{data:[reportData.exposure,100-reportData.exposure]}]}});
+
+  executiveInsight.innerHTML=
+  `<span class='highlight-danger'>If your broker is not actively benchmarking you, you are likely overexposed in the California market.</span>`;
+
+  analysisText.innerText=
+`Trade: ${lead.trade}
+Revenue: $${lead.revenue.toLocaleString()}
+Current Premium: $${lead.premium.toLocaleString()}
+
+Market Benchmark: $${Math.round(reportData.industry).toLocaleString()}
+Risk Adjusted: $${Math.round(reportData.adjusted).toLocaleString()}
+
+Estimated Bid Leakage: $${Math.round(reportData.gap).toLocaleString()}
+Jobs Potentially Lost: ${reportData.jobsLost}`;
+
+  brokerScoreText.innerHTML=
+  `Broker Inefficiency Score: <span class='highlight-danger'>${reportData.inefficiency}/100</span><br>
+  Higher scores indicate missed optimization opportunities in your current insurance program.`;
 }
 
 function downloadPDF(){
-  const { jsPDF } = window.jspdf;
+  const {jsPDF}=window.jspdf;
   const doc=new jsPDF();
 
-  doc.text("Contractor Cost Impact Report",10,10);
-  doc.text(`Cost Pressure: ${reportData.lossProfile}`,10,20);
-  doc.text(`Industry Expected: $${Math.round(reportData.industryExpected)}`,10,30);
-  doc.text(`Risk Adjusted: $${Math.round(reportData.adjustedIndustryEstimate)}`,10,40);
+  doc.setFontSize(16);
+  doc.text("Broker Displacement Report",10,10);
 
-  doc.save("contractor-report.pdf");
+  doc.setFontSize(11);
+  doc.text(`Business: ${lead.business}`,10,20);
+  doc.text(`Trade: ${lead.trade}`,10,30);
+  doc.text(`Revenue: $${lead.revenue}`,10,40);
+  doc.text(`Current Premium: $${lead.premium}`,10,50);
 
-  postWebhook({event:'pdf_downloaded',lead,reportData});
+  doc.text(`Industry Benchmark: $${Math.round(reportData.industry)}`,10,65);
+  doc.text(`Risk Adjusted: $${Math.round(reportData.adjusted)}`,10,75);
+
+  doc.setTextColor(200,0,0);
+  doc.text(`Broker Inefficiency Score: ${reportData.inefficiency}/100`,10,90);
+
+  doc.setTextColor(0,0,0);
+  doc.text(`Estimated Jobs Lost: ${reportData.jobsLost}`,10,100);
+
+  doc.save("broker-displacement-report.pdf");
 }
-
 </script>
 
 </body>
