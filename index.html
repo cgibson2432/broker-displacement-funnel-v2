@@ -1,81 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Albano Insurance Solutions | Insurance Risk Analysis Report v8.3</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-body{margin:0;font-family:'Inter',sans-serif;background:#fff;color:#0a0a0a;}
-.header{background:#0b2a45;color:#fff;padding:18px;font-weight:700;}
-.container{max-width:1100px;margin:auto;padding:24px;}
-.card{background:#fff;padding:20px;border-radius:12px;margin-bottom:16px;box-shadow:0 6px 18px rgba(0,0,0,0.08);} 
-input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ddd;}
-.btn{background:#0b2a45;color:#fff;padding:12px;border:none;border-radius:8px;cursor:pointer;width:100%;font-weight:700;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-canvas{height:260px !important;}
-.table{width:100%;border-collapse:collapse;margin-top:10px;}
-.table td,.table th{border:1px solid #ddd;padding:8px;font-size:13px;}
-.highlight{background:#fdeaea;font-weight:700;}
-.alert{padding:10px;border-radius:8px;margin-top:10px;font-weight:600;}
-.red{background:#fdeaea;color:#b30000;}
-.orange{background:#fff5e6;color:#b26b00;}
-.green{background:#e6f6ec;color:#1f9d55;}
-</style>
-</head>
-<body>
-
-<div class="header">Albano Insurance Solutions | Insurance Risk Analysis Report</div>
-
-<div class="container">
-
-<div class="card" id="leadCard">
-<h2>Find hidden cost & risk in your insurance program</h2>
-<input id="business" placeholder="Business Name">
-<input id="email" placeholder="Email">
-<select id="trade">
-<option>Electrician</option>
-<option>Plumber</option>
-<option>Painter</option>
-<option>HVAC</option>
-<option>General Contractor</option>
-</select>
-<input id="revenue" placeholder="Annual Revenue ($)">
-
-<h4>Current Insurance as Input</h4>
-<input id="gl" placeholder="General Liability ($)">
-<input id="wc" placeholder="Workers Comp ($)">
-<input id="auto" placeholder="Commercial Auto ($)">
-<input id="equip" placeholder="Equipment ($)">
-<input id="umbrella" placeholder="Umbrella ($)">
-
-<button class="btn" onclick="submitLead()">Generate Report</button>
-</div>
-
-<div class="card" id="report" style="display:none">
-<h2>Insurance Risk Analysis Report</h2>
-
-<div id="dealAlert"></div>
-
-<div class="grid">
-<canvas id="premiumChart"></canvas>
-<canvas id="riskChart"></canvas>
-</div>
-
-<table class="table" id="comparisonTable"></table>
-<p id="summary"></p>
-
-<button class="btn" onclick="downloadPDF()">Download PDF</button>
-</div>
-
+<!-- FOOTER -->
+<div style="background:#1c1c1c;color:#fff;padding:30px 20px;margin-top:40px;">
+  <div style="max-width:1100px;margin:auto;display:flex;justify-content:space-between;flex-wrap:wrap;">
+    <div>
+      <h2 style="margin:0;letter-spacing:2px;">ALBANO</h2>
+      <div style="font-size:12px;opacity:.8;">INSURANCE SOLUTIONS</div>
+    </div>
+    <div style="font-size:14px;line-height:1.6;">
+      Albano Insurance Solutions<br>
+      9197 Greenback Lane, Suite E<br>
+      P.O. Box 2470<br>
+      Orangevale, CA 95662<br>
+      License #0442296
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:20px;font-size:12px;opacity:.7;">
+    Copyright 2024 Albano Insurance Solutions | All Rights Reserved | Licensed to transact business across the United States
+  </div>
 </div>
 
 <script>
 let lead={},reportData={},chart1,chart2;
+
+function parseNumber(val){
+ if(!val) return 0;
+ return parseFloat(val.toString().replace(/,/g,'')) || 0;
+}
 
 const TRADE_DATA={
  Electrician:{gl:.005,auto:.018,inland:.008,umbrella:.002,payroll:.32,wcRate:4.5},
@@ -103,18 +54,29 @@ lead={
  business:business.value,
  email:email.value,
  trade:trade.value,
- revenue:+revenue.value,
- gl:+gl.value||0,
- wc:+wc.value||0,
- auto:+auto.value||0,
- equip:+equip.value||0,
- umbrella:+umbrella.value||0
+ revenue:parseNumber(revenue.value),
+ gl:parseNumber(gl.value),
+ wc:parseNumber(wc.value),
+ auto:parseNumber(auto.value),
+ equip:parseNumber(equip.value),
+ umbrella:parseNumber(umbrella.value)
 };
+
 lead.total=lead.gl+lead.wc+lead.auto+lead.equip+lead.umbrella;
 
 const bench=getBenchmarks(lead.trade,lead.revenue);
 reportData={benchmarkTotal:Object.values(bench).reduce((a,b)=>a+b,0),bench};
 render();
+}
+
+function formatCurrency(num){
+ return "$"+Math.round(num).toLocaleString();
+}
+
+function calcVariance(actual,benchmark){
+ const diff=actual-benchmark;
+ const pct=benchmark?((diff/benchmark)*100):0;
+ return {diff,pct};
 }
 
 function render(){
@@ -123,11 +85,10 @@ if(chart2)chart2.destroy();
 
 chart1=new Chart(premiumChart,{type:'bar',data:{labels:['GL','WC','Auto','Equip','Umb'],datasets:[{label:'Current',data:[lead.gl,lead.wc,lead.auto,lead.equip,lead.umbrella]},{label:'Benchmark',data:Object.values(reportData.bench)}]}});
 
-chart2=new Chart(riskChart,{type:'bar',data:{labels:['Total vs Benchmark'],datasets:[{data:[lead.total,reportData.benchmarkTotal]}]}});
+chart2=new Chart(riskChart,{type:'bar',data:{labels:['Total Cost of Insurance vs. Average Cost for Similar Size Company'],datasets:[{data:[lead.total,reportData.benchmarkTotal]}]}});
 
 let variance=((lead.total/reportData.benchmarkTotal)-1)*100;
 
-// DEAL CLOSING ALERT
 let alertBox=document.getElementById('dealAlert');
 if(variance>25){
  alertBox.innerHTML='<div class="alert red">High Probability You Are Overpaying or Misclassified. Immediate review recommended.</div>';
@@ -137,15 +98,33 @@ if(variance>25){
  alertBox.innerHTML='<div class="alert green">Your pricing is within expected range. Coverage review still recommended.</div>';
 }
 
-comparisonTable.innerHTML=`
-<tr><th>Coverage</th><th>Current</th><th>Benchmark</th></tr>
-<tr><td>GL</td><td>$${lead.gl}</td><td>$${Math.round(reportData.bench.gl)}</td></tr>
-<tr><td>WC</td><td>$${lead.wc}</td><td>$${Math.round(reportData.bench.wc)}</td></tr>
-<tr><td>Auto</td><td>$${lead.auto}</td><td>$${Math.round(reportData.bench.auto)}</td></tr>
-<tr><td>Equip</td><td>$${lead.equip}</td><td>$${Math.round(reportData.bench.equip)}</td></tr>
-<tr><td>Umbrella</td><td>$${lead.umbrella}</td><td>$${Math.round(reportData.bench.umbrella)}</td></tr>`;
+function row(name,a,b){
+ const v=calcVariance(a,b);
+ return `<tr>
+<td>${name}</td>
+<td>${formatCurrency(a)}</td>
+<td>${formatCurrency(b)}</td>
+<td>${formatCurrency(v.diff)}</td>
+<td>${Math.round(v.pct)}%</td>
+</tr>`;
+}
 
-summary.innerText=`Your total insurance cost is ${Math.round(variance)}% ${variance>0?'above':'below'} California benchmarks.\nRisk of overbidding: $${Math.round(Math.max(0,lead.total-reportData.benchmarkTotal))}`;
+comparisonTable.innerHTML=`
+<tr><th>Coverage</th><th>Current Insurance as Input</th><th>California Benchmark</th><th>Over / Under ($)</th><th>Over / Under (%)</th></tr>
+${row('General Liability',lead.gl,reportData.bench.gl)}
+${row('Workers Comp',lead.wc,reportData.bench.wc)}
+${row('Commercial Auto',lead.auto,reportData.bench.auto)}
+${row('Inland Marine',lead.equip,reportData.bench.equip)}
+${row('Umbrella',lead.umbrella,reportData.bench.umbrella)}
+${row('TOTAL',lead.total,reportData.benchmarkTotal)}
+`;
+
+summary.innerText=`Total Cost of Insurance vs. Average Cost for Similar Size Company
+
+Your Total: ${formatCurrency(lead.total)}
+Benchmark: ${formatCurrency(reportData.benchmarkTotal)}
+
+Risk of having to overbid (labor, materials & insurance): ${formatCurrency(Math.max(0,lead.total-reportData.benchmarkTotal))}`;
 
 report.style.display='block';
 leadCard.style.display='none';
@@ -157,12 +136,24 @@ const doc=new jsPDF();
 const img1=premiumChart.toDataURL();
 const img2=riskChart.toDataURL();
 
+// PAGE 1
 doc.text('Insurance Risk Analysis Report',10,10);
 doc.addImage(img1,'PNG',10,20,180,60);
+
+// FOOTER PAGE 1
+doc.setFontSize(8);
+doc.text('Albano Insurance Solutions | 9197 Greenback Lane, Suite E | Orangevale, CA 95662 | License #0442296',10,290);
+
+// PAGE 2
 doc.addPage();
 doc.addImage(img2,'PNG',10,20,180,60);
 doc.text(summary.innerText,10,100);
+
+doc.setFontSize(8);
+doc.text('Copyright 2024 Albano Insurance Solutions | All Rights Reserved',10,290);
+
 doc.text('Next Step: Schedule a strategy review with Albano Insurance Solutions.',10,130);
+
 doc.save('Albano-Risk-Report.pdf');
 }
 </script>
