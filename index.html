@@ -14,14 +14,6 @@ body{margin:0;font-family:'Inter',sans-serif;background:#f7f9fc;color:#0a0a0a;}
 .card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.08);margin-bottom:20px;}
 input,select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #ccc;}
 button{background:#0b2a45;color:#fff;padding:14px;border:none;border-radius:8px;cursor:pointer;width:100%;font-weight:700;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-canvas{height:260px !important;}
-.table{width:100%;border-collapse:collapse;margin-top:10px;}
-.table td,.table th{border:1px solid #ddd;padding:8px;font-size:13px;}
-.alert{padding:12px;border-radius:8px;margin-bottom:12px;font-weight:600;}
-.red{background:#fdeaea;color:#b30000;}
-.orange{background:#fff5e6;color:#b26b00;}
-.green{background:#e6f6ec;color:#1f9d55;}
 </style>
 </head>
 <body>
@@ -34,6 +26,8 @@ canvas{height:260px !important;}
 <h3>Identify hidden cost & risk in your insurance program</h3>
 <input id="business" placeholder="Business Name">
 <input id="email" placeholder="Email">
+<input id="cslb" placeholder="CSLB #">
+
 <select id="trade">
 <option>Electrician</option>
 <option>Plumber</option>
@@ -41,131 +35,68 @@ canvas{height:260px !important;}
 <option>HVAC</option>
 <option>General Contractor</option>
 </select>
+
 <input id="revenue" placeholder="Annual Revenue ($)">
 
-<h4>Current Insurance as Input</h4>
+<h4>Current Insurance Premium Input</h4>
+
+<input id="wcCarrier" placeholder="Current WC Insurance Company">
+<input id="wcRenewal" placeholder="WC Premium Renewal Date">
+<input id="wc" placeholder="Workers Comp Premium ($)">
+
 <input id="gl" placeholder="General Liability ($)">
-<input id="wc" placeholder="Workers Comp ($)">
 <input id="auto" placeholder="Commercial Auto ($)">
-<input id="equip" placeholder="Inland Marine / Equipment ($)">
+<input id="equip" placeholder="Equipment ($)">
 <input id="umbrella" placeholder="Umbrella ($)">
 
-<button onclick="submitLead()">Generate My Report</button>
+<button onclick="lookupCSLB()">Auto-Fill from CSLB</button>
+<button onclick="submitLead()">Generate Report</button>
 </div>
 
 <div class="card" id="report" style="display:none">
-<div id="alertBox"></div>
-<div class="grid">
-<canvas id="premiumChart"></canvas>
-<canvas id="riskChart"></canvas>
-</div>
-<table class="table" id="comparisonTable"></table>
 <p id="summary"></p>
-<button onclick="downloadPDF()">Download Full Report</button>
 </div>
 
-</div>
-
-<div style="background:#1c1c1c;color:#fff;padding:20px;text-align:center;font-size:13px;">
-Albano Insurance Solutions | 9197 Greenback Lane, Suite E, Orangevale CA 95662 | License #0442296
 </div>
 
 <script>
 function parseNumber(v){return parseFloat((v||'').replace(/,/g,''))||0}
-function fmt(n){return "$"+Math.round(n).toLocaleString()}
 
-const TRADE={
- Electrician:{gl:.005,auto:.018,inland:.008,umb:.002,payroll:.32,wc:4.5},
- Plumber:{gl:.006,auto:.02,inland:.01,umb:.0025,payroll:.35,wc:5.5},
- Painter:{gl:.0045,auto:.015,inland:.007,umb:.002,payroll:.30,wc:6},
- HVAC:{gl:.0055,auto:.02,inland:.009,umb:.0025,payroll:.34,wc:5},
- "General Contractor":{gl:.007,auto:.022,inland:.012,umb:.003,payroll:.38,wc:6.5}
-};
+// IMPORTANT: CSLB LOOKUP PLACEHOLDER
+async function lookupCSLB(){
+const license=document.getElementById('cslb').value;
 
-function benchmark(trade,rev){
-let t=TRADE[trade];
-let payroll=rev*t.payroll;
-return{
- gl:rev*t.gl,
- wc:(payroll/100)*t.wc,
- auto:rev*t.auto,
- equip:rev*t.inland,
- umbrella:rev*t.umb
-};
+alert("CSLB lookup requires a backend (Make or server) due to CORS restrictions.\n\nNext step: connect this to your Make webhook to scrape CSLB.");
+
+// Example for production:
+// fetch('YOUR_MAKE_WEBHOOK',{method:'POST',body:JSON.stringify({cslb:license})})
+// .then(res=>res.json())
+// .then(data=>{
+//   wcCarrier.value=data.carrier;
+//   wcRenewal.value=data.expiration;
+// });
 }
 
 function submitLead(){
 let lead={
  business:business.value,
  email:email.value,
- trade:trade.value,
- revenue:parseNumber(revenue.value),
- gl:parseNumber(gl.value),
+ cslb:cslb.value,
+ wcCarrier:wcCarrier.value,
+ wcRenewal:wcRenewal.value,
  wc:parseNumber(wc.value),
+ gl:parseNumber(gl.value),
  auto:parseNumber(auto.value),
  equip:parseNumber(equip.value),
  umbrella:parseNumber(umbrella.value)
 };
 
-lead.total=lead.gl+lead.wc+lead.auto+lead.equip+lead.umbrella;
-let bench=benchmark(lead.trade,lead.revenue);
-let benchTotal=Object.values(bench).reduce((a,b)=>a+b,0);
+lead.total=lead.wc+lead.gl+lead.auto+lead.equip+lead.umbrella;
 
-// alert
-let variance=((lead.total/benchTotal)-1)*100;
-let alertHTML='';
-if(variance>25) alertHTML='<div class="alert red">High probability you are overpaying or misclassified.</div>';
-else if(variance>10) alertHTML='<div class="alert orange">Moderate inefficiencies detected.</div>';
-else alertHTML='<div class="alert green">Within expected range.</div>';
-alertBox.innerHTML=alertHTML;
-
-// charts
-new Chart(premiumChart,{type:'bar',data:{labels:['GL','WC','Auto','Equip','Umb'],datasets:[{label:'Current',data:[lead.gl,lead.wc,lead.auto,lead.equip,lead.umbrella]},{label:'Benchmark',data:Object.values(bench)}]}});
-
-new Chart(riskChart,{type:'bar',data:{labels:['Total Cost of Insurance vs. Average Cost for Similar Size Company'],datasets:[{data:[lead.total,benchTotal]}]}});
-
-function row(n,a,b){let d=a-b;let p=((d/b)*100)||0;return `<tr><td>${n}</td><td>${fmt(a)}</td><td>${fmt(b)}</td><td>${fmt(d)}</td><td>${Math.round(p)}%</td></tr>`}
-
-comparisonTable.innerHTML=`
-<tr><th>Coverage</th><th>Current</th><th>Benchmark</th><th>Over/Under ($)</th><th>%</th></tr>
-${row('General Liability',lead.gl,bench.gl)}
-${row('Workers Comp',lead.wc,bench.wc)}
-${row('Commercial Auto',lead.auto,bench.auto)}
-${row('Equipment',lead.equip,bench.equip)}
-${row('Umbrella',lead.umbrella,bench.umbrella)}
-${row('TOTAL',lead.total,benchTotal)}
-`;
-
-summary.innerText=`Total Cost of Insurance vs. Average Cost for Similar Size Company\nYour Total: ${fmt(lead.total)}\nBenchmark: ${fmt(benchTotal)}\nOverbid Risk: ${fmt(Math.max(0,lead.total-benchTotal))}`;
-
-// webhook
-fetch("https://hook.us2.make.com/YOUR_WEBHOOK_URL",{
- method:"POST",
- headers:{"Content-Type":"application/json"},
- body:JSON.stringify(lead)
-}).catch(()=>{});
+summary.innerText=`CSLB #: ${lead.cslb}\nWC Carrier: ${lead.wcCarrier}\nRenewal: ${lead.wcRenewal}\n\nTotal Insurance: $${lead.total.toLocaleString()}`;
 
 report.style.display='block';
 leadCard.style.display='none';
-}
-
-function downloadPDF(){
-const {jsPDF}=window.jspdf;
-const doc=new jsPDF();
-let img1=premiumChart.toDataURL();
-let img2=riskChart.toDataURL();
-
-doc.text('Insurance Risk Analysis Report',10,10);
-doc.addImage(img1,'PNG',10,20,180,60);
-
-doc.addPage();
-doc.addImage(img2,'PNG',10,20,180,60);
-doc.text(summary.innerText,10,100);
-
-doc.setFontSize(8);
-doc.text('Albano Insurance Solutions | CA License #0442296',10,290);
-
-doc.save('Albano-Report.pdf');
 }
 </script>
 
